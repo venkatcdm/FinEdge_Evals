@@ -1,0 +1,25 @@
+{
+  "global": {
+    "description": 70,
+    "invoice_id": 100,
+    "currency": 100,
+    "business_line": 65,
+    "default": 85
+  },
+
+  "germany": {
+    "description": 75,
+    "invoice_id": 100,
+    "tax_classification": 100,
+    "tax_regime": 95,
+    "default": 85
+  },
+
+  "uk": {
+    "description": 70,
+    "invoice_id": 100,
+    "vat_number": 100,
+    "currency": 100,
+    "default": 85
+  }
+}

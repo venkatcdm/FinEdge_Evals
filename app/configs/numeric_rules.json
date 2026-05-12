@@ -1,0 +1,4 @@
+{
+  "exact_match_tolerance": 0.01,
+  "near_match_tolerance": 0.1
+}

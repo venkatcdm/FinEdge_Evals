@@ -1,0 +1,49 @@
+{
+  "top_level_fields": [
+    "invoice_id",
+    "invoice_date",
+    "invoice_period_start",
+    "invoice_period_end",
+    "due_date",
+    "total_amount",
+    "net_amount",
+    "tax_amount",
+    "roundoff_amount",
+    "gross_amount",
+    "currency",
+    "payment_terms",
+    "invoice_category",
+    "invoice_type",
+    "purchase_order_number",
+    "cost_center_code",
+    "invoice_language",
+    "multi_invoice"
+  ],
+
+  "object_sections": [
+    "merchant",
+    "bill_to"
+  ],
+
+  "array_sections": [
+    "items",
+    "tax_line_summaries"
+  ],
+
+  "match_rules": {
+    "items": {
+      "match_by": [
+        "description",
+        "net_amount",
+        "gross_amount",
+        "quantity"
+      ]
+    },
+
+    "tax_line_summaries": {
+      "match_by": [
+        "tax_rate"
+      ]
+    }
+  }
+}

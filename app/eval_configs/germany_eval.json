@@ -1,0 +1,40 @@
+{
+  "top_level_fields": [
+    "invoice_id",
+    "invoice_date",
+    "tax_regime",
+    "gross_amount",
+    "tax_amount"
+  ],
+
+  "sections": [
+    "merchant",
+    "bill_to",
+    "items",
+    "header_tax_details",
+    "tax_line_summaries"
+  ],
+
+  "array_sections": [
+    "items",
+    "header_tax_details",
+    "tax_line_summaries"
+  ],
+
+  "match_rules": {
+    "items": {
+      "match_by": [
+        "description",
+        "net_amount",
+        "gross_amount",
+        "quantity"
+      ]
+    },
+    "header_tax_details": {
+      "match_by": ["header_tax_rate"]
+    },
+    "tax_line_summaries": {
+      "match_by": ["tax_rate"]
+    }
+  }
+}

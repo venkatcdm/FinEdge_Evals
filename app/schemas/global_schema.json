@@ -1,0 +1,482 @@
+{
+  "type": "object",
+  "properties": {
+    "merchant": {
+      "description": "Complete details of the merchant/vendor/seller issuing the invoice. This is the company or entity providing goods/services and requesting payment",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Full Name of the merchant/vendor/seller company issuing the invoice. This is typically found at the top of the invoice, in the header section, or labeled as 'From:', 'Vendor:', 'Seller:', 'Service Provider:', or 'Company Name:'",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "First Name of the merchant/vendor/seller issuing the invoice. This is typically found at the top of the invoice, in the header section, or labeled as 'From:', 'Vendor:', 'Seller:', 'Service Provider:', or 'Company Name:'",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name of the merchant/vendor/seller issuing the invoice. This is typically found at the top of the invoice, in the header section, or labeled as 'From:', 'Vendor:', 'Seller:', 'Service Provider:', or 'Company Name:'",
+          "type": "string"
+        },
+        "business_unit": {
+          "description": "Merchant internal unit/division/branch/department operating the sale or rental (e.g., 'Vermietstation LZNW Langzeit Plus'). Accept labels such as 'Business Unit', 'Dept.', 'Station', 'Branch', 'Filiale', 'Division'. If not explicit, use a clearly labeled sub-entity tied to the transaction (e.g., a rental station code). Leave blank only if no BU-like label is present.",
+          "type": "string"
+        },
+        "tax_reg_number": {
+          "description": "Merchant’s tax registration number (e.g., VAT ID, USt-IdNr., TVA, IVA, GST). Detect common labels: 'VAT', 'VAT No', 'USt-ID', 'Umsatzsteuer-ID', 'TVA', 'IVA', 'GST', 'Tax Reg No', 'Tax ID'. Preserve country prefixes (e.g., 'DE', 'FR', 'GB', 'IT') and formatting without inserting spaces. Do not confuse SEPA Creditor IDs (e.g., 'DE98ZZZ...') with VAT IDs.",
+          "type": "string"
+        },
+        "tax_payer_id": {
+          "description": "Merchant’s Taxpayer Identification not covered by VAT (e.g., TIN, Steuernummer, EIN) if present. Look for labels 'TIN', 'Steuernummer', 'Taxpayer ID', 'Tax No', 'EIN'. If only a VAT ID exists and no separate taxpayer ID is present, leave this blank.",
+          "type": "string"
+        },
+        "bank_account_number": {
+          "description": "Domestic bank account number (non-IBAN) for the merchant where provided (e.g., 'Konto-Nr.', 'Account No'). If only IBAN is present, extract the BBAN component only if explicitly printed; otherwise leave blank. Do not copy IBAN here unless the invoice shows a separate domestic account number.",
+          "type": "string"
+        },
+        "iban_number": {
+          "description": "Merchant IBAN(s) for payment. Normalize by removing all spaces and newlines. If multiple IBANs appear, return ALL valid IBANs separated by a semicolon in the exact order they appear (e.g., 'DE34200300000016177461;DE39200700000084150200'). Validate length/prefix pattern where possible (country code + checksum + BBAN). Do NOT return SEPA Creditor IDs, BICs, or bank names here.",
+          "type": "string"
+        },
+        "address_line_1": {
+          "description": "Primary address line of the merchant/vendor company issuing the invoice. This is the seller's business address",
+          "type": "string"
+        },
+        "city": {
+          "description": "City where the merchant/vendor company is located",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country where the merchant/vendor company is registered or operating from",
+          "type": "string"
+        },
+        "post_code": {
+          "description": "Postal/ZIP code of the merchant/vendor company's address",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email address of the merchant/vendor company for business correspondence",
+          "type": "string"
+        },
+        "province_code": {
+          "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of the merchant/vendor company's address",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "first_name",
+        "last_name",
+        "business_unit",
+        "tax_reg_number",
+        "tax_payer_id",
+        "bank_account_number",
+        "iban_number",
+        "address_line_1",
+        "city",
+        "country",
+        "post_code",
+        "email",
+        "province_code"
+      ],
+      "additionalProperties": false
+    },
+    "bill_to": {
+      "description": "Complete details of the customer/client/buyer being billed. This is the entity that will receive the invoice and is responsible for payment. May be labeled as 'Bill To:', 'Customer Details:', or 'Invoice To:' on the document",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the customer/client/buyer who is being billed. This is typically found in sections labeled 'Bill To:', 'Customer:', 'Client:', 'Buyer:', or 'Invoice To:' on the invoice",
+          "type": "string"
+        },
+        "requestor_first_name": {
+          "description": "First name of the customer/client/buyer who is being billed. This is typically found in sections labeled 'Bill To:', 'Customer:', 'Client:', 'Buyer:', or 'Invoice To:' on the invoice",
+          "type": "string"
+        },
+        "requestor_last_name": {
+          "description": "Last name of the customer/client/buyer who is being billed. This is typically found in sections labeled 'Bill To:', 'Customer:', 'Client:', 'Buyer:', or 'Invoice To:' on the invoice",
+          "type": "string"
+        },
+        "business_unit": {
+          "description": "Business unit or department of the customer company being billed",
+          "type": "string"
+        },
+        "tax_reg_number": {
+          "description": "Tax registration number of the customer/client being billed. This is the buyer's tax identification",
+          "type": "string"
+        },
+        "tax_payer_id": {
+          "description": "Tax payer identification number of the customer/client being billed",
+          "type": "string"
+        },
+        "address_line_1": {
+          "description": "Primary address line of the customer/client being billed. This is where the invoice should be sent or where the buyer is located",
+          "type": "string"
+        },
+        "city": {
+          "description": "City of the customer/client being billed",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country of the customer/client being billed",
+          "type": "string"
+        },
+        "post_code": {
+          "description": "Postal/ZIP code of the customer/client's billing address",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email address of the customer/client being billed for invoice correspondence",
+          "type": "string"
+        },
+        "province_code": {
+          "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of customer/client's billing address",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "requestor_first_name",
+        "requestor_last_name",
+        "business_unit",
+        "tax_reg_number",
+        "tax_payer_id",
+        "address_line_1",
+        "city",
+        "country",
+        "post_code",
+        "email",
+        "province_code"
+      ],
+      "additionalProperties": false
+    },
+    "invoice_id": {
+      "description": "Unique invoice number or identifier, typically labeled as 'Invoice #:', 'Invoice No:', 'Bill No:', or 'Reference No:'",
+      "type": "string"
+    },
+    "invoice_date": {
+      "description": "Date when the invoice was issued in YYYY-MM-DD format, usually labeled as 'Invoice Date:', 'Issue Date:', or 'Bill Date:'. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "invoice_period_start": {
+      "description": "The date when the billing or service period begins in YYYY-MM-DD format. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "mpa_start_date": {
+      "description": "Start date of the agreement/assignment under an MPA (Master Purchase Agreement / Master Professional Agreement). Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "mpa_end_date": {
+      "description": "End date of the agreement/assignment under an MPA (Master Purchase Agreement / Master Professional Agreement). Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "electronic_uid": {
+      "description": "A unique electronic identifier tied to the invoice or transaction.\nIn global systems it could be: UUID, Transaction ID\nDocument ID generated by ERP",
+      "type": "string"
+    },
+    "invoice_period_end": {
+      "description": "The date when the billing or service period ends in YYYY-MM-DD format. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "due_date": {
+      "description": "Payment due date in YYYY-MM-DD format, often labeled as 'Due Date:', 'Payment Due:', or 'Pay By:'.  Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "total_amount": {
+      "description": "Final total amount to be paid including all taxes, fees, and charges. This is the bottom-line amount on the invoice",
+      "type": "string"
+    },
+    "net_amount": {
+      "description": "Total net amount before taxes across all items and charges",
+      "type": "string"
+    },
+    "tax_amount": {
+      "description": "Total tax amount across all items, usually shown in tax summary section",
+      "type": "string"
+    },
+    "roundoff_amount": {
+      "description": "Rounding adjustment amount to arrive at the final total, may be positive or negative",
+      "type": "string"
+    },
+    "gross_amount": {
+      "description": "Total gross amount including taxes but before any rounding adjustments",
+      "type": "string"
+    },
+    "currency": {
+      "description": "Currency code (e.g., USD, EUR, GBP) or symbol used for all amounts on the invoice",
+      "type": "string"
+    },
+    "payment_terms": {
+      "description": "Payment terms and conditions, such as 'Net 30', 'Due on Receipt', 'Payment within 15 days', etc.",
+      "type": "string"
+    },
+    "invoice_category": {
+      "description": "Category of the invoice, e.g., Purchase Order or Non Purchase Order based on if the invoice references a Purchase Order indicating pre-approved procurement, otherwise it is a Non Purchase Order",
+      "type": "string"
+    },
+    "invoice_type": {
+      "description": "Type of the invoice, e.g., Standard Invoice, Credit Note, Debit Note, or PrePayment. And ensure that we always return the invoice type in English.",
+      "type": "string"
+    },
+    "purchase_order_number": {
+      "description": "Purchase order number if the invoice is a purchase order. If there are multiple purchase order number include all of them separated by semi-colon.",
+      "type": "string"
+    },
+    "cost_center_code": {
+      "description": "A unique alphanumeric identifier (e.g., \"CC001\", \"DEPT-HR\", \"3001\") that appears at invoice header level",
+      "type": "string"
+    },
+    "header_tax_details": {
+      "description": "List of all the tax related details present in the invoice at the invoice level.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "header_tax_classification": {
+            "description": "Analyze the invoice and extract the type of tax present in invoice. Output will be either Withholding_Tax or Transaction_Tax.  \nThere can be one of a two types of tax present in invoice - a Transactional Tax or a Withholding Tax\n\nDefinitions:\n-Transactional Tax: A tax that is ADDED to the invoice or line item amount and increases the total payable amount.\n  Examples: VAT, GST, Sales Tax, IVA.\n\n- Withholding Tax: A tax that is DEDUCTED from the payment to the supplier and reduces the amount paid.\n  Examples: Withholding Tax, TDS, Retention Tax.",
+            "type": "string"
+          },
+          "header_tax_classification_code": {
+            "description": "This field should extract withholding tax classification code from Mexico invoices.",
+            "type": "string"
+          },
+          "header_tax_province_code": {
+            "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of corresponding tax extracted if it is there in the tax otherwise this will be null.",
+            "type": "string"
+          },
+          "header_tax_rate": {
+            "description": "Extract the percentage of tax deducted at source from payments, typically labeled as Withholding Tax, WHT, TDS, or Source Tax and expressed as a percentage. It can be both withholding tax rate or transaction tax rate depending on the tax classification type. It should be null if it is not in invoice.",
+            "type": "string"
+          },
+          "header_tax_regime": {
+            "description": "Analyze the invoice and identify tax rate type present in the invoice.\n\nDefinition:\n- Rate Type refers to the classification or category of tax applied to the invoice such as GST, HST, PST, VAT, Sales Tax, IVA, or similar indirect tax types.",
+            "type": "string"
+          },
+          "header_tax_amount": {
+            "description": "Total tax amount for this rate category, found in tax summary at the invoice level. It should be null if it is not in invoice.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "header_tax_classification",
+          "header_tax_classification_code",
+          "header_tax_province_code",
+          "header_tax_rate",
+          "header_tax_regime",
+          "header_tax_amount"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "fiscal_regime": {
+      "description": "Extract the fiscal regime applicable to the merchant/vendor from the invoice.\n\nThe fiscal regime may be explicitly labeled (e.g., \"Fiscal Regime\", \"Tax Regime\", \"Régimen Fiscal\", \"Regime Fiscale\") or implied through standardized codes or legal tax classifications.\n\nReturn only the fiscal regime value exactly as it appears in the invoice.\nIf the fiscal regime is not present or cannot be confidently determined, return null.\nDo not return any additional text.",
+      "type": "string"
+    },
+    "invoice_language": {
+      "description": "Detect the language of the invoice text and respond with only the ISO 639-1 language code",
+      "type": "string"
+    },
+    "translated_text": {
+      "description": "Do not perform translation and return blank string.",
+      "type": "string"
+    },
+    "multi_invoice": {
+      "description": "Check if the input file has more than one invoice attached to it.\nIf more than one invoice is present then flag it as 1 otherwise mark it as 0. When we have more than one invoice ids or invoice numbers it becomes an indicator for multiple invoices. Files can be either pdf or image or xml.",
+      "type": "string"
+    },
+    "items": {
+      "description": "List of all line items, products, services, or charges detailed in the invoice",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "Description of the item, product, or service being invoiced. This appears in the line items section of the invoice. And keep the description under 240 characters.",
+            "type": "string"
+          },
+          "business_line": {
+            "description": "Business line, category, department, or product line that this item belongs to. May be labeled as 'Category:', 'Business Line:', 'Department:', or 'Product Type:'",
+            "type": "string"
+          },
+          "mpa_start_date_line": {
+            "description": "Start date of the agreement/assignment under an MPA (Master Purchase Agreement / Master Professional Agreement) at line item level. Always convert the date into YYYY-MM-DD format.",
+            "type": "string"
+          },
+          "mpa_end_date_line": {
+            "description": "End date of the agreement/assignment under an MPA (Master Purchase Agreement / Master Professional Agreement) at line item level. Always convert the date into YYYY-MM-DD format.",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "Quantity or number of units of the item being billed",
+            "type": "string"
+          },
+          "unit_price": {
+            "description": "Price per unit of the item before taxes and discounts",
+            "type": "string"
+          },
+          "witholding_tax_classification": {
+            "description": "Analyze the invoice and extract the type of tax if it is having a withholding tax present in it. Output will be Witholding_Tax if withholding tax is present in invoice at line item level\nDefinition:\n-Withholding Tax: A tax that is DEDUCTED from the payment to the supplier and reduces the amount paid.\nExamples: Withholding Tax, TDS, Retention Tax.\n-If there is more that one withholding tax at line item level this should be null.",
+            "type": "string"
+          },
+          "witholding_tax_rate": {
+            "description": "-Extract the percentage of tax deducted at source from payments,typically labeled as Withholding Tax, WHT, TDS, or Source Tax and expressed as a percentage. It should be withholding tax rate.\n-If there is more that one withholding rate this field should be null.",
+            "type": "string"
+          },
+          "witholding_tax_regime": {
+            "description": "-Analyze the invoice and identify tax rate type for withholding tax regime present in the invoice at the line item level.\n-Definition:\nRate Type refers to the classification or category of tax applied to the invoice such as GST, HST, PST, VAT, Sales Tax, IVA, or similar indirect tax types.\n-If there is more that one withholding regime type this field should be null.",
+            "type": "string"
+          },
+          "witholding_province_code": {
+            "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of corresponding withholding tax if it is there in the tax otherwise this will be null.",
+            "type": "string"
+          },
+          "witholding_tax_amount": {
+            "description": "-Total withholding tax amount for this rate category, found in tax summary at the line item level.\n-If there is more that one withholding tax amount this field should be null.",
+            "type": "string"
+          },
+          "witholding_tax_classification_code": {
+            "description": "This field should extract withholding tax classification code from Mexico invoices.",
+            "type": "string"
+          },
+          "tax_classification": {
+            "description": "Analyze the invoice and extract the type of tax if it is having a transactional tax present in it. Output will be Transaction_Tax if transactional tax present in invoice at line item level.\nDefinition:\n-Transactional Tax: A tax that is ADDED to the invoice or line item amount and increases the total payable amount.\n  Examples: VAT, GST, Sales Tax, IVA.\n-If there is more that one transactional tax at line item level this should be null.",
+            "type": "string"
+          },
+          "tax_rate": {
+            "description": "-Extract the percentage of tax deducted at source from payments, expressed as a percentage. It should be transactional tax rate.\n-If there is more that one transactional rate this field should be null.\n- For US/PR/II countries this field will return empty string.",
+            "type": "string"
+          },
+          "tax_regime": {
+            "description": "-Analyze the invoice and identify tax rate type for transactional tax regime present in the invoice at the line item level.\n-Definition:\nRate Type refers to the classification or category of tax applied to the invoice such as GST, HST, PST, VAT, Sales Tax, IVA, or similar indirect tax types.\n-If there is more that one transactional regime type this field should be null.",
+            "type": "string"
+          },
+          "tax_amount": {
+            "description": "-Total transactional tax amount for this rate category, found in tax summary at the line item level.\n-If there is more that one transactional tax amount this field should be null.\n-For US/PR/II countries this field will return empty string.",
+            "type": "string"
+          },
+          "tax_province_code": {
+            "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of corresponding transactional tax if it is there in the tax otherwise this will be null.",
+            "type": "string"
+          },
+          "gross_amount": {
+            "description": "Total amount for this item including taxes, extract it if mentioned otherwise do the calculation (gross = quantity*net + tax)",
+            "type": "string"
+          },
+          "net_amount": {
+            "description": "Net amount for this item before taxes, extract it if mentioned otherwise do the calculation (quantity × unit_price - discount)",
+            "type": "string"
+          },
+          "discount": {
+            "description": "Discount amount, promotional savings, or voucher reduction applied to this item",
+            "type": "string"
+          },
+          "cost_center_code": {
+            "description": "A unique alphanumeric identifier (e.g., \"CC001\", \"DEPT-HR\", \"3001\") that appears at line item level",
+            "type": "string"
+          },
+          "description_country_language": {
+            "description": "Detect the language of the invoice text and respond with only the ISO 639-1 language code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "business_line",
+          "mpa_start_date_line",
+          "mpa_end_date_line",
+          "quantity",
+          "unit_price",
+          "witholding_tax_classification",
+          "witholding_tax_rate",
+          "witholding_tax_regime",
+          "witholding_province_code",
+          "witholding_tax_amount",
+          "witholding_tax_classification_code",
+          "tax_classification",
+          "tax_rate",
+          "tax_regime",
+          "tax_amount",
+          "tax_province_code",
+          "gross_amount",
+          "net_amount",
+          "discount",
+          "cost_center_code",
+          "description_country_language"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "tax_line_summaries": {
+      "description": "Summary breakdown of taxes by rate, typically tax details section at invoice level and line item level.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tax_rate": {
+            "description": "Extract the percentage of tax deducted at source from payments, typically labeled as Withholding Tax, WHT, TDS, or Source Tax and expressed as a percentage. It can be both withholding tax rate or transaction tax rate depending on the tax classification type.",
+            "type": "string"
+          },
+          "tax_classification_code": {
+            "description": "This field should extract withholding tax classification code from Mexico invoices.",
+            "type": "string"
+          },
+          "tax_classification": {
+            "description": "Analyze the invoice and extract the type of tax present in invoice at the line item level. Output will be either Withholding_Tax or Transaction_Tax.  \nThere can be one of a two types of tax present in invoice - a Transactional Tax or a Withholding Tax\n\nDefinitions:\n-Transactional Tax: A tax that is ADDED to the invoice or line item amount and increases the total payable amount.\n  Examples: VAT, GST, Sales Tax, IVA.\n\n- Withholding Tax: A tax that is DEDUCTED from the payment to the supplier and reduces the amount paid.\n  Examples: Withholding Tax, TDS, Retention Tax.",
+            "type": "string"
+          },
+          "tax_regime": {
+            "description": "Analyze the invoice and identify tax rate type present in the invoice at the line item level.\n\nDefinition:\n- Rate Type refers to the classification or category of tax applied to the invoice such as GST, HST, PST, VAT, Sales Tax, IVA, or similar indirect tax types.",
+            "type": "string"
+          },
+          "tax_province_code": {
+            "description": "Province code (e.g., ON, QC, BC, CA, TX, NY) of corresponding tax extracted if it is there in the tax otherwise this will be null.",
+            "type": "string"
+          },
+          "tax_amount": {
+            "description": "Total tax or VAT amount for this rate category, found in tax summary or totals section",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tax_rate",
+          "tax_classification_code",
+          "tax_classification",
+          "tax_regime",
+          "tax_province_code",
+          "tax_amount"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "merchant",
+    "bill_to",
+    "invoice_id",
+    "invoice_date",
+    "invoice_period_start",
+    "mpa_start_date",
+    "mpa_end_date",
+    "electronic_uid",
+    "invoice_period_end",
+    "due_date",
+    "total_amount",
+    "net_amount",
+    "tax_amount",
+    "roundoff_amount",
+    "gross_amount",
+    "currency",
+    "payment_terms",
+    "invoice_category",
+    "invoice_type",
+    "purchase_order_number",
+    "cost_center_code",
+    "header_tax_details",
+    "fiscal_regime",
+    "invoice_language",
+    "translated_text",
+    "multi_invoice",
+    "items",
+    "tax_line_summaries"
+  ],
+  "additionalProperties": false
+}

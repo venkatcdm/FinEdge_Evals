@@ -1,0 +1,329 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "merchant": {
+      "additionalProperties": false,
+      "description": "Complete details of the merchant/vendor/seller issuing the invoice. This is the company or entity providing goods/services and requesting payment",
+      "properties": {
+        "name": {
+          "description": "Name of the merchant/vendor/seller company issuing the invoice. This is typically found at the top of the invoice, in the header section, or labeled as 'From:', 'Vendor:', 'Seller:', 'Service Provider:', or 'Company Name:'",
+          "type": "string"
+        },
+        "business_unit": {
+          "description": "Merchant internal unit/division/branch/department operating the sale or rental (e.g., 'Vermietstation LZNW Langzeit Plus'). Accept labels such as 'Business Unit', 'Dept.', 'Station', 'Branch', 'Filiale', 'Division'. If not explicit, use a clearly labeled sub-entity tied to the transaction (e.g., a rental station code). Leave blank only if no BU-like label is present.",
+          "type": "string"
+        },
+        "tax_reg_number": {
+          "description": "Merchant’s tax registration number (e.g., VAT ID, USt-IdNr., TVA, IVA, GST). Detect common labels: 'VAT', 'VAT No', 'USt-ID', 'Umsatzsteuer-ID', 'TVA', 'IVA', 'GST', 'Tax Reg No', 'Tax ID'. Preserve country prefixes (e.g., 'DE', 'FR', 'GB', 'IT') and formatting without inserting spaces. Do not confuse SEPA Creditor IDs (e.g., 'DE98ZZZ...') with VAT IDs.",
+          "type": "string"
+        },
+        "tax_payer_id": {
+          "description": "Merchant’s Taxpayer Identification not covered by VAT (e.g., TIN, Steuernummer, EIN) if present. Look for labels 'TIN', 'Steuernummer', 'Taxpayer ID', 'Tax No', 'EIN'. If only a VAT ID exists and no separate taxpayer ID is present, leave this blank.",
+          "type": "string"
+        },
+        "bank_account_number": {
+          "description": "Domestic bank account number (non-IBAN) for the merchant where provided (e.g., 'Konto-Nr.', 'Account No'). If only IBAN is present, extract the BBAN component only if explicitly printed; otherwise leave blank. Do not copy IBAN here unless the invoice shows a separate domestic account number.",
+          "type": "string"
+        },
+        "iban_number": {
+          "description": "Merchant IBAN(s) for payment. Normalize by removing all spaces and newlines. If multiple IBANs appear, return ALL valid IBANs separated by a semicolon in the exact order they appear (e.g., 'DE34200300000016177461;DE39200700000084150200'). Validate length/prefix pattern where possible (country code + checksum + BBAN). Do NOT return SEPA Creditor IDs, BICs, or bank names here.",
+          "type": "string"
+        },
+        "address_line_1": {
+          "description": "Primary address line of the merchant/vendor company issuing the invoice. This is the seller's business address",
+          "type": "string"
+        },
+        "city": {
+          "description": "City where the merchant/vendor company is located",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country where the merchant/vendor company is registered or operating from",
+          "type": "string"
+        },
+        "post_code": {
+          "description": "Postal/ZIP code of the merchant/vendor company's address",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email address of the merchant/vendor company for business correspondence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "business_unit",
+        "tax_reg_number",
+        "tax_payer_id",
+        "bank_account_number",
+        "iban_number",
+        "address_line_1",
+        "city",
+        "country",
+        "post_code",
+        "email"
+      ],
+      "type": "object"
+    },
+    "bill_to": {
+      "additionalProperties": false,
+      "description": "Complete details of the customer/client/buyer being billed. This is the entity that will receive the invoice and is responsible for payment. May be labeled as 'Bill To:', 'Customer Details:', or 'Invoice To:' on the document",
+      "properties": {
+        "name": {
+          "description": "Name of the customer/client/buyer who is being billed. This is typically found in sections labeled 'Bill To:', 'Customer:', 'Client:', 'Buyer:', or 'Invoice To:' on the invoice",
+          "type": "string"
+        },
+        "business_unit": {
+          "description": "Business unit or department of the customer company being billed",
+          "type": "string"
+        },
+        "tax_reg_number": {
+          "description": "Tax registration number of the customer/client being billed. This is the buyer's tax identification",
+          "type": "string"
+        },
+        "tax_payer_id": {
+          "description": "Tax payer identification number of the customer/client being billed",
+          "type": "string"
+        },
+        "address_line_1": {
+          "description": "Primary address line of the customer/client being billed. This is where the invoice should be sent or where the buyer is located",
+          "type": "string"
+        },
+        "city": {
+          "description": "City of the customer/client being billed",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country of the customer/client being billed",
+          "type": "string"
+        },
+        "post_code": {
+          "description": "Postal/ZIP code of the customer/client's billing address",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email address of the customer/client being billed for invoice correspondence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "business_unit",
+        "tax_reg_number",
+        "tax_payer_id",
+        "address_line_1",
+        "city",
+        "country",
+        "post_code",
+        "email"
+      ],
+      "type": "object"
+    },
+    "invoice_id": {
+      "description": "Unique invoice number or identifier, typically labeled as 'Invoice #:', 'Invoice No:', 'Bill No:', or 'Reference No:'",
+      "type": "string"
+    },
+    "invoice_date": {
+      "description": "Date when the invoice was issued in YYYY-MM-DD format, usually labeled as 'Invoice Date:', 'Issue Date:', or 'Bill Date:'. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "invoice_period_start": {
+      "description": "The date when the billing or service period begins in YYYY-MM-DD format. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "invoice_period_end": {
+      "description": "The date when the billing or service period ends in YYYY-MM-DD format. Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "due_date": {
+      "description": "Payment due date in YYYY-MM-DD format, often labeled as 'Due Date:', 'Payment Due:', or 'Pay By:'.  Always convert the date into YYYY-MM-DD format.",
+      "type": "string"
+    },
+    "total_amount": {
+      "description": "Final total amount to be paid including all taxes, fees, and charges. This is the bottom-line amount on the invoice",
+      "type": "number"
+    },
+    "net_amount": {
+      "description": "Total net amount before taxes across all items and charges",
+      "type": "number"
+    },
+    "tax_amount": {
+      "description": "Total tax amount across all items, usually shown in tax summary section",
+      "type": "number"
+    },
+    "roundoff_amount": {
+      "description": "Rounding adjustment amount to arrive at the final total, may be positive or negative",
+      "type": "number"
+    },
+    "gross_amount": {
+      "description": "Total gross amount including taxes but before any rounding adjustments",
+      "type": "number"
+    },
+    "currency": {
+      "description": "Currency code (e.g., USD, EUR, GBP) or symbol used for all amounts on the invoice",
+      "type": "string"
+    },
+    "payment_terms": {
+      "description": "Payment terms and conditions, such as 'Net 30', 'Due on Receipt', 'Payment within 15 days', etc.",
+      "type": "string"
+    },
+    "invoice_category": {
+      "description": "Category of the invoice, e.g., Purchase Order or Non Purchase Order based on if the invoice references a Purchase Order indicating pre-approved procurement, otherwise it is a Non Purchase Order",
+      "type": "string"
+    },
+    "invoice_type": {
+      "description": "Type of the invoice, e.g., Standard Invoice, Credit Note, Debit Note, or PrePayment. And ensure that we always return the invoice type in English.",
+      "type": "string"
+    },
+    "purchase_order_number": {
+      "description": "Purchase order number if the invoice is a purchase order",
+      "type": "string"
+    },
+    "cost_center_code": {
+      "description": "A unique alphanumeric identifier (e.g., \"CC001\", \"DEPT-HR\", \"3001\") that appears at invoice header level",
+      "type": "string"
+    },
+    "invoice_language": {
+      "description": "Detect the language of the invoice text and respond with only the ISO 639-1 language code",
+      "type": "string"
+    },
+    "translated_text": {
+      "description": "Do not perform translation and return blank string.",
+      "type": "string"
+    },
+    "multi_invoice": {
+      "description": "Check if the input file has more than one invoice attached to it.\nIf more than one invoice is present then flag it as 1 otherwise mark it as 0. When we have more than one invoice ids it becomes an indicator for multiple invoices. If not sure default should be 0.",
+      "type": "number"
+    },
+    "items": {
+      "description": "List of all line items, products, services, or charges detailed in the invoice",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "description": "Description of the item, product, or service being invoiced. This appears in the line items section of the invoice. And keep the description under 240 characters.",
+            "type": "string"
+          },
+          "business_line": {
+            "description": "Business line, category, department, or product line that this item belongs to. May be labeled as 'Category:', 'Business Line:', 'Department:', or 'Product Type:'",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "Quantity or number of units of the item being billed",
+            "type": "number"
+          },
+          "unit_price": {
+            "description": "Price per unit of the item before taxes and discounts",
+            "type": "number"
+          },
+          "tax_rate": {
+            "description": "Tax or VAT rate percentage applicable for this specific item",
+            "type": "number"
+          },
+          "tax_amount": {
+            "description": "Tax or VAT amount calculated for this specific item extract from the invoice if mentioned or perform the calculation (quantity * unit price * tax rate)",
+            "type": "number"
+          },
+          "with_holding_tax_rate": {
+            "description": "Extract the percentage of tax deducted at source from payments, typically labeled as Withholding Tax, WHT, TDS, or Source Tax and expressed as a percentage",
+            "type": "number"
+          },
+          "gross_amount": {
+            "description": "Total amount for this item including taxes, extract it if mentioned otherwise do the calculation (gross = quantity*net + tax)",
+            "type": "number"
+          },
+          "net_amount": {
+            "description": "Net amount for this item before taxes, extract it if mentioned otherwise do the calculation (quantity × unit_price - discount)",
+            "type": "number"
+          },
+          "discount": {
+            "description": "Discount amount, promotional savings, or voucher reduction applied to this item",
+            "type": "number"
+          },
+          "cost_center_code": {
+            "description": "A unique alphanumeric identifier (e.g., \"CC001\", \"DEPT-HR\", \"3001\") that appears at line item level",
+            "type": "string"
+          },
+          "description_country_language": {
+            "description": "Detect the language of the invoice text and respond with only the ISO 639-1 language code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "business_line",
+          "quantity",
+          "unit_price",
+          "tax_rate",
+          "tax_amount",
+          "with_holding_tax_rate",
+          "gross_amount",
+          "net_amount",
+          "discount",
+          "cost_center_code",
+          "description_country_language"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tax_line_summaries": {
+      "description": "Summary breakdown of taxes by rate, typically found in a tax summary section showing different tax rates and their totals",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "tax_rate": {
+            "description": "Tax or VAT rate percentage for this tax summary line, typically found in tax breakdown section",
+            "type": "number"
+          },
+          "tax_amount": {
+            "description": "Total tax or VAT amount for this rate category, found in tax summary or totals section",
+            "type": "number"
+          },
+          "gross_amount": {
+            "description": "Total gross amount for this tax rate category (taxable amount + tax)",
+            "type": "number"
+          },
+          "net_amount": {
+            "description": "Total net amount (taxable base) for this tax rate category before tax",
+            "type": "number"
+          }
+        },
+        "required": [
+          "tax_rate",
+          "tax_amount",
+          "gross_amount",
+          "net_amount"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "merchant",
+    "bill_to",
+    "invoice_id",
+    "invoice_date",
+    "invoice_period_start",
+    "invoice_period_end",
+    "due_date",
+    "total_amount",
+    "net_amount",
+    "tax_amount",
+    "roundoff_amount",
+    "gross_amount",
+    "currency",
+    "payment_terms",
+    "invoice_category",
+    "invoice_type",
+    "purchase_order_number",
+    "cost_center_code",
+    "invoice_language",
+    "translated_text",
+    "multi_invoice",
+    "items",
+    "tax_line_summaries"
+  ],
+  "type": "object"
+}
