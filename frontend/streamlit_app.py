@@ -25,6 +25,7 @@ from app.evaluator.evaluation_report_html import (
 )
 from app.main import evaluate
 from app.main import evaluate as evaluate_func
+from app.utils.schema_shape_validate import SchemaMismatchError
 from app.utils.loaders import (
     load_schema,
     load_thresholds
@@ -230,12 +231,30 @@ if st.button("Run Evaluation", use_container_width=True):
             # RUN EVALUATION
             # ----------------------------------------
 
-            result = evaluate(
-                extracted_path=ext_path,
-                groundtruth_path=gt_path,
-                schema_name=schema,
-                thresholds=updated_thresholds
-            )
+            try:
+
+                result = evaluate(
+                    extracted_path=ext_path,
+                    groundtruth_path=gt_path,
+                    schema_name=schema,
+                    thresholds=updated_thresholds
+                )
+
+            except SchemaMismatchError as exc:
+
+                st.error(
+                    f"The uploaded files do not match the **{schema}** schema. "
+                    "Choose the region that matches your JSON (global, germany, or uk), "
+                    "or re-export data to that structure."
+                )
+
+                with st.expander("What failed (schema shape)", expanded=True):
+
+                    for line in exc.errors:
+
+                        st.code(line, language=None)
+
+                st.stop()
 
         # ------------------------------------------------
         # RESULTS

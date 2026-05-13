@@ -12,6 +12,7 @@ from app.utils.loaders import load_eval_config
 from app.utils.loaders import load_json
 from app.utils.loaders import load_matching_weights
 from app.utils.loaders import load_thresholds
+from app.utils.schema_shape_validate import validate_upload_against_schema
 
 
 def _get_field_weight(field_name, eval_config):
@@ -125,6 +126,12 @@ def evaluate(
     extracted_raw = load_json(extracted_path)
 
     groundtruth_raw = load_json(groundtruth_path)
+
+    validate_upload_against_schema(
+        extracted_raw,
+        groundtruth_raw,
+        schema_name,
+    )
 
     extracted = coerce_extracted_invoices(extracted_raw)
 
@@ -413,7 +420,7 @@ if __name__ == "__main__":
     result = evaluate(
         "sample_data/extracted.json",
         "sample_data/groundtruth.json",
-        "germany",
+        "global",
     )
 
     print(result)
