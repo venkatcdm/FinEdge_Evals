@@ -17,6 +17,12 @@ sys.path.insert(0, str(ROOT_DIR))
 # IMPORTS
 # ---------------------------------------------------
 
+from datetime import datetime
+
+from app.evaluator.evaluation_report_html import (
+    build_evaluation_report_html,
+    build_field_scores_csv,
+)
 from app.main import evaluate
 from app.main import evaluate as evaluate_func
 from app.utils.loaders import (
@@ -674,6 +680,51 @@ if st.button("Run Evaluation", use_container_width=True):
         else:
 
             st.warning("No field accuracy found")
+
+        # --------------------------------------------
+        # DOWNLOAD REPORT
+        # --------------------------------------------
+
+        st.subheader("Download report")
+
+        st.caption(
+            "Export a print-ready HTML summary (open in a browser, or Print → Save as PDF) "
+            "and a CSV of field-level scores for spreadsheets."
+        )
+
+        report_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_html = build_evaluation_report_html(
+            result,
+            schema_name=schema,
+            default_result=default_result,
+            strict_result=strict_result,
+            lenient_result=lenient_result,
+            thresholds_used=updated_thresholds,
+        )
+        report_bytes = report_html.encode("utf-8")
+        field_csv = build_field_scores_csv(result).encode("utf-8")
+
+        dl1, dl2 = st.columns(2)
+
+        with dl1:
+
+            st.download_button(
+                label="Download evaluation report (HTML)",
+                data=report_bytes,
+                file_name=f"invoice_evaluation_report_{schema}_{report_ts}.html",
+                mime="text/html; charset=utf-8",
+                use_container_width=True,
+            )
+
+        with dl2:
+
+            st.download_button(
+                label="Download field scores (CSV)",
+                data=field_csv,
+                file_name=f"invoice_evaluation_field_scores_{schema}_{report_ts}.csv",
+                mime="text/csv; charset=utf-8",
+                use_container_width=True,
+            )
 
         # --------------------------------------------
         # RAW JSON OUTPUT
